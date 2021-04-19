@@ -1,0 +1,7 @@
+
+GET http://0.0.0.0:8080/graduate_student/2
+Accept: application/json
+
+###
+GET http://0.0.0.0:8080/graduate_student
+Accept: application/json
