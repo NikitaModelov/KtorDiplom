@@ -1,4 +1,4 @@
-package ru.modelov.graduatestudents.model
+package ru.modelov.graduatestudents.model.student
 
 data class GraduateStudentDto(
     val id: Long,
@@ -12,6 +12,6 @@ data class GraduateStudentDto(
     val faculty: String,
     val speciality: String,
     val placeWork: String,
-    val achievement: String,
+    val achievement: String?,
     val urlImage: String
 )

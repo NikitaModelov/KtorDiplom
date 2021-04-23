@@ -1,7 +1,7 @@
 
-GET http://0.0.0.0:8080/graduate_student/2
+GET http://0.0.0.0:8080/graduate_student/3
 Accept: application/json
 
 ###
-GET http://0.0.0.0:8080/graduate_student
+GET http://0.0.0.0:8080/graduate_student/2021/Бизнес-информатика
 Accept: application/json

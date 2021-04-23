@@ -1,22 +1,33 @@
 package ru.modelov.graduatestudents.contoller
 
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.modelov.graduatestudents.model.GraduateStudentDto
-import ru.modelov.graduatestudents.model.GraduateStudentTable
-import ru.modelov.graduatestudents.model.mapToGraduateStudentDto
+import ru.modelov.graduatestudents.model.student.GraduateStudentDto
+import ru.modelov.graduatestudents.model.student.GraduateStudentTable
+import ru.modelov.graduatestudents.model.student.mapToGraduateStudentDto
+import ru.modelov.graduatestudents.model.students.GraduateStudentCardDto
 
 class GraduateStudentsController {
 
-    fun getAll(): List<GraduateStudentDto> {
-        val results: MutableList<GraduateStudentDto> = mutableListOf()
+    fun getAll(year: String, faculty: String): List<GraduateStudentCardDto> {
+        var results: MutableList<GraduateStudentCardDto> = mutableListOf()
         transaction {
-            GraduateStudentTable.selectAll().map {
-                results.add(
-                    it.mapToGraduateStudentDto()
-                )
+            results = GraduateStudentTable.select {
+                (GraduateStudentTable.faculty eq faculty) and
+                        (GraduateStudentTable.yearGraduate eq year)
             }
+                .map {
+                    GraduateStudentCardDto(
+                        id = it[GraduateStudentTable.uid],
+                        firstName = it[GraduateStudentTable.firstName],
+                        secondName = it[GraduateStudentTable.secondName],
+                        patronymic = it[GraduateStudentTable.patronymic],
+                        yearGraduate = it[GraduateStudentTable.yearGraduate],
+                        group = it[GraduateStudentTable.group],
+                        urlImage = it[GraduateStudentTable.urlImage]
+                    )
+                }.toMutableList()
         }
         return results
     }

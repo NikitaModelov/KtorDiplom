@@ -1,4 +1,4 @@
-package ru.modelov.graduatestudents.model
+package ru.modelov.graduatestudents.model.student
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table

@@ -7,9 +7,20 @@ import io.ktor.routing.*
 import ru.modelov.graduatestudents.contoller.GraduateStudentsController
 
 fun Route.graduateStudentRouting(controller: GraduateStudentsController) {
-    route("/graduate_student") {
-        get {
-            val graduateStudent = controller.getAll() ?: return@get call.respondText(
+    route("/graduate_student/") {
+        get("{year}/{faculty}") {
+            // ToDo: Валидацию прикрутить
+            val year = call.parameters["year"] ?: return@get call.respondText(
+                text = "Missing or malformed year",
+                status = HttpStatusCode.BadRequest
+            )
+            val faculty = call.parameters["faculty"]
+                ?: return@get call.respondText(
+                    text = "Missing or malformed faculty",
+                    status = HttpStatusCode.BadRequest
+                )
+
+            val graduateStudent = controller.getAll(year, faculty) ?: return@get call.respondText(
                 text = "Error request",
                 status = HttpStatusCode.BadRequest
             )
