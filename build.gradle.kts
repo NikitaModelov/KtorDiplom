@@ -32,5 +32,12 @@ dependencies {
     implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.postgresql:postgresql:42.2.19")
 
+    implementation("io.ktor:ktor-auth:$ktor_version")
+    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
+
+    implementation("org.apache.commons:commons-email:1.5")
+
+    implementation("com.ToxicBakery.library.bcrypt:bcrypt:1.0.9")
+
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
