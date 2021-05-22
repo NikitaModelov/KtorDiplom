@@ -4,7 +4,8 @@ val logback_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.5.0"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "ru.modelov"
@@ -12,6 +13,8 @@ version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
+
+
 
 repositories {
     mavenLocal()
@@ -32,5 +35,18 @@ dependencies {
     implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.postgresql:postgresql:42.2.19")
 
+    implementation("io.ktor:ktor-auth:$ktor_version")
+    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
+
+    implementation("org.apache.commons:commons-email:1.5")
+
+    implementation("com.ToxicBakery.library.bcrypt:bcrypt:1.0.9")
+
+    implementation("org.litote.kmongo:kmongo-coroutine:4.2.7")
+
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+}
+
+tasks.create("stage") {
+    dependsOn("installDist")
 }

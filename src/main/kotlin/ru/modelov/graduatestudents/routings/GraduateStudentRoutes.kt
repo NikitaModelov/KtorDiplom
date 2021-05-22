@@ -1,32 +1,43 @@
 package ru.modelov.graduatestudents.routings
 
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import ru.modelov.graduatestudents.contoller.GraduateStudentsController
+import ru.modelov.graduatestudents.contoller.faculty.FacultyController
+import ru.modelov.graduatestudents.contoller.user.GraduateStudentsController
 
-fun Route.graduateStudentRouting(controller: GraduateStudentsController) {
-    route("/graduate_student") {
-        get {
-            val graduateStudent = controller.getAll() ?: return@get call.respondText(
-                text = "Error request",
-                status = HttpStatusCode.BadRequest
-            )
+fun Route.graduateStudentRouting(
+    graduateStudentsController: GraduateStudentsController,
+    facultyController: FacultyController
+) {
+    route("/api/graduate_student") {
+        authenticate("access") {
+            get {
+                val year = call.request.queryParameters["year"] ?: return@get call.respondText(
+                    text = "Missing or malformed year",
+                    status = HttpStatusCode.BadRequest
+                )
 
-            call.respond(graduateStudent)
+                val faculty = facultyController.getFacultyByToken(getToken()!!)
+                faculty?.let {
+                    val graduateStudent = graduateStudentsController.getAllGraduate(year, faculty)
+                    call.respond(graduateStudent)
+                }
         }
         get("{id}") {
-            val id = call.parameters["id"]?.toLong() ?: return@get call.respondText(
+            val id = call.parameters["id"] ?: return@get call.respondText(
                 text = "Missing or malformed id",
                 status = HttpStatusCode.BadRequest
             )
-            val graduateStudent = controller.getById(id) ?: return@get call.respondText(
-                text = "No graduate student with id $id",
+            val graduateStudent = graduateStudentsController.getUserById(id) ?: return@get call.respondText(
+                text = "No graduate student with id: $id",
                 status = HttpStatusCode.BadRequest
             )
 
-            call.respond(graduateStudent)
+                call.respond(graduateStudent)
+            }
         }
     }
 }
