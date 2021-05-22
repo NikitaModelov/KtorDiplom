@@ -5,6 +5,7 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import ru.modelov.graduatestudents.contoller.email.EmailController
@@ -23,6 +24,8 @@ fun Long.withOffset(offset: Duration) = this + offset.toMillis()
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+val port = System.getenv("PORT")?.toInt() ?: 23567
+
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {
     install(Authentication) {
@@ -40,8 +43,8 @@ fun Application.module() {
     }
 
     routing {
-        get {
-            call.respond("I'm alive!")
+        get("/") {
+            call.respondText("I'm alive!", contentType = ContentType.Text.Plain)
         }
     }
 
