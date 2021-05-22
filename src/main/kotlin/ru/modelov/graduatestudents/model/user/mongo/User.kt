@@ -1,6 +1,7 @@
 package ru.modelov.graduatestudents.model.user.mongo
 
 import org.bson.codecs.pojo.annotations.BsonId
+import ru.modelov.graduatestudents.contoller.user.rules.Rules
 
 data class User(
     @BsonId
@@ -19,7 +20,7 @@ data class User(
     val scope: ScopeGroup,
     val links: List<String>?,
     val active: Boolean,
-    val rule: String
+    val rules: List<String> = listOf(Rules.USER.value)
 )
 
 fun User.toSecretUser() =

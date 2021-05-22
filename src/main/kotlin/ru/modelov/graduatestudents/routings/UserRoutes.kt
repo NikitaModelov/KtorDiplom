@@ -12,9 +12,12 @@ import ru.modelov.graduatestudents.contoller.email.EmailController
 import ru.modelov.graduatestudents.contoller.password.PasswordController
 import ru.modelov.graduatestudents.contoller.token.TokenController
 import ru.modelov.graduatestudents.contoller.user.UserController
+import ru.modelov.graduatestudents.model.user.mongo.SecretUser
 import ru.modelov.graduatestudents.model.user.mongo.User
+import ru.modelov.graduatestudents.model.user.mongo.UserRules
 import ru.modelov.service.auth.LoginUser
 import ru.modelov.service.auth.RefreshToken
+import ru.modelov.util.exception.NoRelevantRules
 
 fun Route.userRouting(
     userController: UserController,
@@ -100,6 +103,30 @@ fun Route.userRouting(
                     ContentType.parse("application/json"),
                     HttpStatusCode.NotFound
                 )
+            }
+            post("updateUser") {
+                val updateUser = call.receive<SecretUser>()
+                userController.updateUser(updateUser, getToken()!!)
+
+                call.respond(HttpStatusCode.OK)
+            }
+            post("updateRules") {
+                val updateUser = call.receive<UserRules>()
+                try {
+                    userController.updateUserRule(updateUser, getToken()!!)
+                } catch (e: NoRelevantRules) {
+                    return@post call.respondText(
+                        """
+                    { 
+                        "message": "No relevant rules available"
+                    }
+                    """.trimIndent(),
+                        ContentType.parse("application/json"),
+                        HttpStatusCode.Locked
+                    )
+                }
+
+                call.respond(HttpStatusCode.OK)
             }
         }
     }
