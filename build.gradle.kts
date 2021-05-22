@@ -5,6 +5,7 @@ val logback_version: String by project
 plugins {
     application
     kotlin("jvm") version "1.5.0"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "ru.modelov"
@@ -44,4 +45,8 @@ dependencies {
     implementation("org.litote.kmongo:kmongo-coroutine:4.2.7")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+}
+
+tasks.create("stage") {
+    dependsOn("installDist")
 }
