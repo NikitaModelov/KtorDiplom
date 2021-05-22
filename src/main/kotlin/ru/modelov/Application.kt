@@ -1,19 +1,16 @@
 package ru.modelov
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.routing.*
-import org.jetbrains.exposed.sql.Database
-import ru.modelov.graduatestudents.contoller.GraduateStudentsController
-import ru.modelov.graduatestudents.contoller.GroupController
 import ru.modelov.graduatestudents.contoller.email.EmailController
+import ru.modelov.graduatestudents.contoller.faculty.FacultyController
 import ru.modelov.graduatestudents.contoller.password.PasswordController
 import ru.modelov.graduatestudents.contoller.token.TokenController
+import ru.modelov.graduatestudents.contoller.user.GraduateStudentsController
 import ru.modelov.graduatestudents.contoller.user.UserController
 import ru.modelov.graduatestudents.routings.graduateStudentRouting
 import ru.modelov.graduatestudents.routings.userRouting
@@ -27,8 +24,6 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module() {
-    initDatabase()
-
     install(Authentication) {
         jwt("access") {
             verifier {
@@ -50,21 +45,11 @@ fun Application.module() {
     graduateStudentRoutes()
 }
 
-
-private fun initDatabase() {
-    val config = HikariConfig("/hikari.properties")
-    config.schema = "public"
-    val ds = HikariDataSource(config)
-    Database.connect(ds)
-}
-
 fun Application.graduateStudentRoutes() {
     routing {
         graduateStudentRouting(
-            graduateStudentsController = GraduateStudentsController(
-                userController = UserController()
-            ),
-            groupController = GroupController(
+            graduateStudentsController = GraduateStudentsController(),
+            facultyController = FacultyController(
                 userController = UserController()
             )
         )
