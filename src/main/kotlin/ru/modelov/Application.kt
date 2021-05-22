@@ -5,6 +5,7 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import ru.modelov.graduatestudents.contoller.email.EmailController
 import ru.modelov.graduatestudents.contoller.faculty.FacultyController
@@ -35,6 +36,12 @@ fun Application.module() {
                     JWTPrincipal(token.payload)
                 else null
             }
+        }
+    }
+
+    routing {
+        get {
+            call.respond("I'm alive!")
         }
     }
 
