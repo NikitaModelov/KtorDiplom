@@ -60,4 +60,6 @@ class TokenController {
     }
 
     suspend fun isExistToken(token: String) = collection.findOne(TokensMongo::token eq token)
+
+    suspend fun logout(token: String) = collection.deleteOne(TokensMongo::token eq token)
 }

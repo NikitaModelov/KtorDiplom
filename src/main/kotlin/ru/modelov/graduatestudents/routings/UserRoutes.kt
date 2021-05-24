@@ -111,6 +111,11 @@ fun Route.userRouting(
                     HttpStatusCode.NotFound
                 )
             }
+            get("logout") {
+                tokenController.logout(getToken()!!)
+
+                call.respond(HttpStatusCode.OK)
+            }
             post("updateUser") {
                 val updateUser = call.receive<SecretUser>()
                 userController.updateUser(updateUser, getToken()!!)
