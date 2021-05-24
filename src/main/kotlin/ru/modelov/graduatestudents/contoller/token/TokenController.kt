@@ -50,9 +50,14 @@ class TokenController {
             combine(
                 setValue(TokensMongo::token, tokenPair.accessToken),
                 setValue(TokensMongo::refreshToken, tokenPair.refreshToken),
-                setValue(TokensMongo::expiresAt, System.currentTimeMillis().withOffset(Duration.ofDays(Config.refreshLifetime))),
+                setValue(
+                    TokensMongo::expiresAt,
+                    System.currentTimeMillis().withOffset(Duration.ofDays(Config.refreshLifetime))
+                ),
             ),
             UpdateOptions().upsert(false)
         )
     }
+
+    suspend fun isExistToken(token: String) = collection.findOne(TokensMongo::token eq token)
 }
