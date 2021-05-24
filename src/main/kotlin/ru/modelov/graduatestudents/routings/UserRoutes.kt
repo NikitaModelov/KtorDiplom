@@ -91,7 +91,11 @@ fun Route.userRouting(
 
         authenticate("access") {
             get("validate") {
-                call.respond(HttpStatusCode.Accepted)
+                if (tokenController.isExistToken(getToken()!!) != null) {
+                    call.respond(HttpStatusCode.Accepted)
+                } else {
+                    call.respond(HttpStatusCode.Unauthorized)
+                }
             }
             get("user") {
                 val user = userController.getUserByTokenMongo(getToken()!!)
