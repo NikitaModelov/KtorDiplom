@@ -24,9 +24,13 @@ fun Route.graduateStudentRouting(
                 val scope = facultyController.getScopeByToken(getToken()!!)
                 scope?.let {
                     val graduateStudent = if (group.isNullOrBlank()) {
-                        graduateStudentsController.getAllGraduate(year, scope.faculty, scope.group)
+                        graduateStudentsController.getAllGraduate(
+                            year = year,
+                            faculty = scope.faculty,
+                            group = scope.group
+                        )
                     } else {
-                        graduateStudentsController.getAllGraduate(year, scope.faculty, group)
+                        graduateStudentsController.getAllGraduate(year = year, faculty = scope.faculty, group = "")
                     }
 
                     call.respond(graduateStudent)
