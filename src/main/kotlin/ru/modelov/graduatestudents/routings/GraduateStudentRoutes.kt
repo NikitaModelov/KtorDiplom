@@ -27,10 +27,14 @@ fun Route.graduateStudentRouting(
                         graduateStudentsController.getAllGraduate(
                             year = year,
                             faculty = scope.faculty,
-                            group = scope.group
+                            group = ""
                         )
                     } else {
-                        graduateStudentsController.getAllGraduate(year = year, faculty = scope.faculty, group = "")
+                        graduateStudentsController.getAllGraduate(
+                            year = year,
+                            faculty = scope.faculty,
+                            group = scope.group
+                        )
                     }
 
                     call.respond(graduateStudent)
