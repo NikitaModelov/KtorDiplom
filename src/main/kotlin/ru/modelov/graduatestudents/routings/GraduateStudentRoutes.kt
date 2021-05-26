@@ -33,7 +33,7 @@ fun Route.graduateStudentRouting(
                         graduateStudentsController.getAllGraduate(
                             year = year,
                             faculty = scope.faculty,
-                            group = scope.group
+                            group = group
                         )
                     }
 
