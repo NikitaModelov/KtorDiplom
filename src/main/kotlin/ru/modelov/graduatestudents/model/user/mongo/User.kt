@@ -46,6 +46,7 @@ fun User.toUserCard() =
         _id = _id,
         firstName = firstName,
         secondName = secondName,
+        email = email,
         patronymic = patronymic,
         yearGraduate = yearGraduate,
         scope = scope,
