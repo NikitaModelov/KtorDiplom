@@ -19,22 +19,28 @@ fun Route.graduateStudentRouting(
                     text = "Missing or malformed year",
                     status = HttpStatusCode.BadRequest
                 )
+                val group = call.request.queryParameters["group"]
 
-                val faculty = facultyController.getFacultyByToken(getToken()!!)
-                faculty?.let {
-                    val graduateStudent = graduateStudentsController.getAllGraduate(year, faculty)
+                val scope = facultyController.getScopeByToken(getToken()!!)
+                scope?.let {
+                    val graduateStudent = if (group.isNullOrBlank()) {
+                        graduateStudentsController.getAllGraduate(year, scope.faculty, scope.group)
+                    } else {
+                        graduateStudentsController.getAllGraduate(year, scope.faculty, group)
+                    }
+
                     call.respond(graduateStudent)
                 }
-        }
-        get("{id}") {
-            val id = call.parameters["id"] ?: return@get call.respondText(
-                text = "Missing or malformed id",
-                status = HttpStatusCode.BadRequest
-            )
-            val graduateStudent = graduateStudentsController.getUserById(id) ?: return@get call.respondText(
-                text = "No graduate student with id: $id",
-                status = HttpStatusCode.BadRequest
-            )
+            }
+            get("{id}") {
+                val id = call.parameters["id"] ?: return@get call.respondText(
+                    text = "Missing or malformed id",
+                    status = HttpStatusCode.BadRequest
+                )
+                val graduateStudent = graduateStudentsController.getUserById(id) ?: return@get call.respondText(
+                    text = "No graduate student with id: $id",
+                    status = HttpStatusCode.BadRequest
+                )
 
                 call.respond(graduateStudent)
             }
